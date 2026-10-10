@@ -3,19 +3,13 @@ export const config = {
 };
 
 export default async function handler(request) {
-  const ua = request.headers.get('user-agent') || '(vazio)';
-  const url = new URL(request.url);
+  const ua = (request.headers.get('user-agent') || '').toLowerCase();
   
-  // MODO DEBUG: mostra o User-Agent que o Vercel recebeu
-  if (url.searchParams.get('debug') === '1') {
-    return new Response("UA recebido: " + ua, { status: 200 });
-  }
-  
-  // Bloqueia apenas navegadores REAIS
+  // Bloqueia APENAS navegadores reais
+  // Delta NÃO tem "chrome/", "safari/", "firefox/" — só "applewebkit" (que o Chrome também tem)
   const isRealBrowser = 
     ua.includes("chrome/") || 
     ua.includes("safari/") || 
-    ua.includes("applewebkit") ||
     ua.includes("firefox/") ||
     ua.includes("edg/") ||
     ua.includes("opr/");
@@ -24,6 +18,7 @@ export default async function handler(request) {
     return new Response("Acesso negado.", { status: 403 });
   }
   
+  const url = new URL(request.url);
   const appsScriptUrl = "https://script.google.com/macros/s/AKfycbyPEqPGDqmmB3Pl6t65qvPWKjddmJnwYELI_GsuC_4NBQ2ocfX1XWaOX8MwoJkH5-8YeA/exec" + url.search;
   
   try {
