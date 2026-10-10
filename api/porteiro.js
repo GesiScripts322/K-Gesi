@@ -3,10 +3,15 @@ export const config = {
 };
 
 export default async function handler(request) {
-  const ua = (request.headers.get('user-agent') || '').toLowerCase();
+  const ua = request.headers.get('user-agent') || '(vazio)';
+  const url = new URL(request.url);
   
-  // Bloqueia apenas navegadores REAIS (Chrome, Firefox, Safari, Edge)
-  // Delta mobile NÃO tem "chrome/", "safari/" nem "applewebkit" no UA
+  // MODO DEBUG: mostra o User-Agent que o Vercel recebeu
+  if (url.searchParams.get('debug') === '1') {
+    return new Response("UA recebido: " + ua, { status: 200 });
+  }
+  
+  // Bloqueia apenas navegadores REAIS
   const isRealBrowser = 
     ua.includes("chrome/") || 
     ua.includes("safari/") || 
@@ -19,13 +24,11 @@ export default async function handler(request) {
     return new Response("Acesso negado.", { status: 403 });
   }
   
-  const url = new URL(request.url);
   const appsScriptUrl = "https://script.google.com/macros/s/AKfycbyPEqPGDqmmB3Pl6t65qvPWKjddmJnwYELI_GsuC_4NBQ2ocfX1XWaOX8MwoJkH5-8YeA/exec" + url.search;
   
   try {
     const response = await fetch(appsScriptUrl);
     const script = await response.text();
-    
     return new Response(script, {
       headers: { "Content-Type": "text/plain" }
     });
