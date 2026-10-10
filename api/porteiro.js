@@ -5,9 +5,17 @@ export const config = {
 export default async function handler(request) {
   const ua = (request.headers.get('user-agent') || '').toLowerCase();
   
-  const isBrowser = ua.includes("mozilla") || ua.includes("chrome") || ua.includes("firefox") || ua.includes("safari") || ua.includes("edge");
+  // Bloqueia apenas navegadores REAIS (Chrome, Firefox, Safari, Edge)
+  // Delta mobile NÃO tem "chrome/", "safari/" nem "applewebkit" no UA
+  const isRealBrowser = 
+    ua.includes("chrome/") || 
+    ua.includes("safari/") || 
+    ua.includes("applewebkit") ||
+    ua.includes("firefox/") ||
+    ua.includes("edg/") ||
+    ua.includes("opr/");
   
-  if (isBrowser) {
+  if (isRealBrowser) {
     return new Response("Acesso negado.", { status: 403 });
   }
   
