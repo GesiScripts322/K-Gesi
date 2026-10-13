@@ -19,7 +19,7 @@ export default async function handler(request) {
   }
   
   const url = new URL(request.url);
-  const appsScriptUrl = "https://script.google.com/macros/s/AKfycbyPEqPGDqmmB3Pl6t65qvPWKjddmJnwYELI_GsuC_4NBQ2ocfX1XWaOX8MwoJkH5-8YeA/exec" + url.search;
+  const appsScriptUrl = "https://script.google.com/macros/s/AKfycbywnmx1yw2G1tE2DrpohLl7K6h1Sd67UU62kU7FP8EEMIe99xVsYfJHh9UXNHRNNzITzA/exec" + url.search;
   
   try {
     const response = await fetch(appsScriptUrl);
