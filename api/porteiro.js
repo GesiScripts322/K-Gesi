@@ -3,24 +3,10 @@ export const config = {
 };
 
 export default async function handler(request) {
-  const ua = (request.headers.get('user-agent') || '').toLowerCase();
-  
-  const isRealBrowser = 
-    ua.includes("chrome/") || 
-    ua.includes("safari/") || 
-    ua.includes("firefox/") ||
-    ua.includes("edg/") ||
-    ua.includes("opr/");
-  
-  if (isRealBrowser) {
-    return new Response("Acesso negado.", { status: 403 });
-  }
-  
   const url = new URL(request.url);
-  
-  // URL NOVA DO APPS SCRIPT
-  const appsScriptUrl = "https://script.google.com/macros/s/AKfycbzOg4J7qsBVK9L8zhan9X9uvC9A4pMpEnP95TH1GJLGA7SPrltjKWfuD0G0v3iYtk0X/exec" + url.search;
-  
+  // URL NOVA DO APPS SCRIPT AQUI
+  const appsScriptUrl = "https://script.google.com/macros/s/AKfycbwGcHyZ7QIVl-X5j25g7b47u2p7XihcyfGywM-jJNDFas5f2awd1Boy00L_QDyi4j7M/exec" + url.search;
+
   try {
     const response = await fetch(appsScriptUrl);
     const script = await response.text();
